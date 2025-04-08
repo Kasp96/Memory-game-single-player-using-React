@@ -1,15 +1,18 @@
-import { useState } from 'react';
 import './SingleCard.css';
 
-export const SingleCard = ({ children, handleCardClick }) => {
-	const [clicked, setClicked] = useState(false);
-
+export const SingleCard = ({
+	children,
+	handleCardClick,
+	cardId,
+	revealed,
+}) => {
 	return (
 		<div
-			onClick={() => setClicked(true)}
-			className={`card ${clicked ? 'revealed' : ''}`}>
+			key={cardId}
+			onClick={(e) => handleCardClick(cardId, e)}
+			className={revealed ? 'card revealed' : 'card'}>
 			{children}
 		</div>
 	);
 };
-// revealed
+

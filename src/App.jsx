@@ -6,42 +6,62 @@ import { ResetButton } from './components/ResetButton/ResetButton';
 // ❓
 
 const cardsArr = [
-	{ icon: '🎸', iconId: 1, id: 1 },
-	{ icon: '🎈', iconId: 2, id: 2 },
-	{ icon: '🎉', iconId: 3, id: 3 },
-	{ icon: '🎁', iconId: 4, id: 4 },
-	{ icon: '❤️', iconId: 5, id: 5 },
-	{ icon: '🌟', iconId: 6, id: 6 },
-	{ icon: '🚀', iconId: 7, id: 7 },
-	{ icon: '🎂', iconId: 8, id: 8 },
-	{ icon: '🎸', iconId: 1, id: 9 },
-	{ icon: '🎈', iconId: 2, id: 10 },
-	{ icon: '🎉', iconId: 3, id: 11 },
-	{ icon: '🎁', iconId: 4, id: 12 },
-	{ icon: '❤️', iconId: 5, id: 13 },
-	{ icon: '🌟', iconId: 6, id: 14 },
-	{ icon: '🚀', iconId: 7, id: 15 },
-	{ icon: '🎂', iconId: 8, id: 16 },
+	{ icon: '🎸', iconId: 1, id: 1, revealed: false },
+	{ icon: '🎈', iconId: 2, id: 2, revealed: false },
+	{ icon: '🎉', iconId: 3, id: 3, revealed: false },
+	{ icon: '🎁', iconId: 4, id: 4, revealed: false },
+	{ icon: '❤️', iconId: 5, id: 5, revealed: false },
+	{ icon: '🌟', iconId: 6, id: 6, revealed: false },
+	{ icon: '🚀', iconId: 7, id: 7, revealed: false },
+	{ icon: '🎂', iconId: 8, id: 8, revealed: false },
+	{ icon: '🎸', iconId: 1, id: 9, revealed: false },
+	{ icon: '🎈', iconId: 2, id: 10, revealed: false },
+	{ icon: '🎉', iconId: 3, id: 11, revealed: false },
+	{ icon: '🎁', iconId: 4, id: 12, revealed: false },
+	{ icon: '❤️', iconId: 5, id: 13, revealed: false },
+	{ icon: '🌟', iconId: 6, id: 14, revealed: false },
+	{ icon: '🚀', iconId: 7, id: 15, revealed: false },
+	{ icon: '🎂', iconId: 8, id: 16, revealed: false },
 ];
 
-const shuffledArr = cardsArr
-	.map((a) => ({ sort: Math.random(), value: a }))
-	.sort((a, b) => a.sort - b.sort)
-	.map((a) => a.value);
+const shuffledArr = () =>
+	cardsArr
+		.map((a) => ({ sort: Math.random(), value: a }))
+		.sort((a, b) => a.sort - b.sort)
+		.map((a) => a.value);
 
 function App() {
-	const [isCardRevealed, setIsCardRevealed] = useState(false)
+	const [arr, setArr] = useState(shuffledArr);
+	const [firstCard, setFirstCard] = useState(null);
+	const [secondCard, setSecondCard] = useState(null);
+
+	const handleCardClick = (cardId, e) => {
+		setArr((cards) =>
+			cards.map(
+				(card) => (card.id === cardId ? { ...card, revealed: true } : card),
+				console.log(e)
+			)
+		);
+	};
+	const handleResetButton = () => {
+		setArr(shuffledArr);
+	};
+
 	return (
 		<>
 			<div className='container'>
 				<div className='app'>
-					{shuffledArr.map((card) => (
-						<SingleCard key={card.id}>
-							{isCardRevealed ? `${card.icon}` : "❓"}
-							</SingleCard>
+					{arr.map((card) => (
+						<SingleCard
+							revealed={card.revealed ? true : false}
+							key={card.id}
+							handleCardClick={handleCardClick}
+							cardId={card.id}>
+							{card.revealed ? `${card.icon}` : '❓'}
+						</SingleCard>
 					))}
 				</div>
-				<ResetButton />
+				<ResetButton handleResetButton={handleResetButton} />
 			</div>
 		</>
 	);
