@@ -1,0 +1,14 @@
+.resetBtn {
+	border: none;
+	background-color: #28a745;
+	color: white;
+	padding: 8px 10px;
+	font-size: 0.75rem;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.resetBtn:hover {
+	background-color: #21923c;
+}

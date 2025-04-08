@@ -1,3 +1,5 @@
+import './ResetButton.css'
+
 export const ResetButton = () => {
-    return <button>Zresetuj</button>
+    return <button className='resetBtn'>Zresetuj</button>
 }

@@ -10,7 +10,7 @@
     cursor: pointer;
     transition: all .4s;
 }
-.clicked {
+.revealed {
     background-color: #777;
     transform: scale(1.1);
 }
