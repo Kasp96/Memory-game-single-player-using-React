@@ -1,0 +1,16 @@
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.35rem;
+	width: 70px;
+	height: 70px;
+	border-radius: 6px;
+	background-color: #007bff;
+    cursor: pointer;
+    transition: all .4s;
+}
+.clicked {
+    background-color: #777;
+    transform: scale(1.1);
+}
