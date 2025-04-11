@@ -1,8 +1,9 @@
-import './ResetButton.css'
+import './ResetButton.css';
 
-export const ResetButton = ({handleResetButton}) => {
-
-
-
-    return <button onClick={handleResetButton} className='resetBtn'>Zresetuj</button>
-}
+export const ResetButton = ({ handleResetButton }) => {
+	return (
+		<button onClick={handleResetButton} className='resetBtn'>
+			Zresetuj
+		</button>
+	);
+};

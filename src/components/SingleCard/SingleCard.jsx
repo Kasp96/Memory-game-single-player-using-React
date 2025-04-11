@@ -1,18 +1,13 @@
 import './SingleCard.css';
 
-export const SingleCard = ({
-	children,
-	handleCardClick,
-	cardId,
-	revealed,
-}) => {
+export const SingleCard = ({ children, handleCardClick, cardId, revealed }) => {
 	return (
 		<div
 			key={cardId}
-			onClick={(e) => handleCardClick(cardId, e)}
+			onClick={() => handleCardClick(cardId)}
 			className={revealed ? 'card revealed' : 'card'}>
 			{children}
 		</div>
 	);
 };
-
+  

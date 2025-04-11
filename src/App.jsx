@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './index.css';
 import { SingleCard } from './components/SingleCard/SingleCard';
 import { ResetButton } from './components/ResetButton/ResetButton';
@@ -26,44 +26,83 @@ const cardsArr = [
 
 const shuffledArr = () =>
 	cardsArr
-		.map((a) => ({ sort: Math.random(), value: a }))
+		.map((card) => ({ sort: Math.random(), value: card }))
 		.sort((a, b) => a.sort - b.sort)
 		.map((a) => a.value);
 
 function App() {
-	const [arr, setArr] = useState(shuffledArr);
+	const [arr, setArr] = useState(shuffledArr());
 	const [firstCard, setFirstCard] = useState(null);
-	const [secondCard, setSecondCard] = useState(null);
+	const [isDisabled, setIsDisabled] = useState(false);
+	const [isGameWon, setIsGameWon] = useState(false);
+	useEffect(() => {
+		checkAllRevealedCards();
+	}, [arr]);
 
-	const handleCardClick = (cardId, e) => {
-		setArr((cards) =>
-			cards.map(
-				(card) => (card.id === cardId ? { ...card, revealed: true } : card),
-				console.log(e)
-			)
-		);
+	const checkAllRevealedCards = () => {
+		const isGameFinisched = arr.some((card) => card.revealed === false);
+		isGameFinisched === true ? isGameWon : setIsGameWon(true);
 	};
+
+	const handleCardClick = (cardId) => {
+		if (isDisabled) return;
+
+		const clickedCard = arr.find((card) => card.id === cardId);
+
+		if (!clickedCard || clickedCard.revealed) return;
+
+		const updatedCards = arr.map((card) =>
+			card.id === cardId ? { ...card, revealed: true } : card
+		);
+		setArr(updatedCards);
+
+		if (!firstCard) {
+			setFirstCard(clickedCard);
+		} else {
+			setIsDisabled(true);
+
+			if (firstCard.iconId === clickedCard.iconId) {
+				setFirstCard(null);
+				setIsDisabled(false);
+			} else {
+				setTimeout(() => {
+					const resetCards = arr.map((card) =>
+						card.id === firstCard.id || card.id === clickedCard.id
+							? { ...card, revealed: false }
+							: card
+					);
+					setArr(resetCards);
+					setFirstCard(null);
+					setIsDisabled(false);
+				}, 1000);
+			}
+		}
+	};
+
 	const handleResetButton = () => {
-		setArr(shuffledArr);
+		setArr(shuffledArr());
+		setFirstCard(null);
+		setIsDisabled(false);
+		setIsGameWon(false);
 	};
 
 	return (
-		<>
-			<div className='container'>
-				<div className='app'>
-					{arr.map((card) => (
-						<SingleCard
-							revealed={card.revealed ? true : false}
-							key={card.id}
-							handleCardClick={handleCardClick}
-							cardId={card.id}>
-							{card.revealed ? `${card.icon}` : '❓'}
-						</SingleCard>
-					))}
-				</div>
-				<ResetButton handleResetButton={handleResetButton} />
+		<div className='container'>
+			<div className='app'>
+				{arr.map((card) => (
+					<SingleCard
+						key={card.id}
+						revealed={card.revealed}
+						handleCardClick={handleCardClick}
+						cardId={card.id}>
+						{card.revealed ? `${card.icon}` : '❓'}
+					</SingleCard>
+				))}
 			</div>
-		</>
+			{isGameWon && <p>udało sie!</p>}
+
+			<ResetButton handleResetButton={handleResetButton} />
+		</div>
 	);
 }
 
